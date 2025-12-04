@@ -29,9 +29,11 @@ namespace TomadaStore.CustomerAPI.Controllers.v1
             {
                 _logger.LogInformation("Creating a new customer");
                 var id = await _customerService.InsertCustomerAsync(customer);
+
+                //return Created();
                 var createdCustomer = await _customerService.GetCustomerByIdAsync(id);
-                Console.WriteLine(nameof(GetCustomerByIdAsync));
-                return Created();
+
+                return CreatedAtAction("GetCustomerById", new { id = createdCustomer.Id }, createdCustomer);
             }
             catch (Exception ex)
             {
@@ -58,7 +60,7 @@ namespace TomadaStore.CustomerAPI.Controllers.v1
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCustomerById")]
         public async Task<ActionResult<CustomerResponseDTO>> GetCustomerByIdAsync(int id)
         {
             try
