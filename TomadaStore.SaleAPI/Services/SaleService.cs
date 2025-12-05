@@ -33,9 +33,10 @@ namespace TomadaStore.SaleAPI.Services
                 var responseCustomer = await _httpClientFactory
                     .CreateClient("CustomerAPI")
                     .GetFromJsonAsync<CustomerResponseDTO>(idCustomer.ToString());
+                if (responseCustomer is null)
+                    throw new InvalidOperationException("O Cliente informado não foi encontrado!");
 
                 var listProducts = new List<ProductResponseDTO>();
-
                 foreach (var p in saleDTO.ProductsId)
                 {
                     var responseProduct = await _httpClientFactory
@@ -43,6 +44,8 @@ namespace TomadaStore.SaleAPI.Services
                         .GetFromJsonAsync<ProductResponseDTO>(p);
                     listProducts.Add(responseProduct);
                 }
+                if (listProducts.All(p => p is null))
+                    throw new InvalidOperationException("Não foram informados produtos não encontrados!");
 
                 await _saleRepository.CreateSaleAsync(responseCustomer, listProducts, saleDTO);
             }

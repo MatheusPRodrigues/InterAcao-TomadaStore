@@ -31,6 +31,11 @@ namespace TomadaStore.SaleAPI.Controllers.v1
                 await _saleService.CreateSaleAsync(idCustomer, saleDTO);
                 return Created();
             }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning($"validation operations return: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"Error occurring while create a sale: {ex.Message}");
