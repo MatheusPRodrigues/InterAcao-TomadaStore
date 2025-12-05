@@ -42,5 +42,23 @@ namespace TomadaStore.SaleAPI.Controllers.v1
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<SaleResponseDTO?>>> GetAllSalesAsync()
+        {
+            try
+            {
+                var response = await _saleService.GetAllSalesAsync();
+                if (response is null)
+                    return NotFound("Nenhuma venda encontrada!");
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurring while create a sale: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

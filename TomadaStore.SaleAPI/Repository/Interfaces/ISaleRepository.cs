@@ -2,6 +2,7 @@
 using TomadaStore.Models.DTOs.Customer;
 using TomadaStore.Models.DTOs.Product;
 using TomadaStore.Models.DTOs.SaleRequestDTO;
+using TomadaStore.Models.Models;
 
 namespace TomadaStore.SaleAPI.Repository.Interfaces
 {
@@ -12,5 +13,6 @@ namespace TomadaStore.SaleAPI.Repository.Interfaces
             List<ProductResponseDTO> productsDTO,
             SaleRequestDTO saleDTO
         );
+        Task<List<Sale>> GetAllSalesAsync();
     }
 }

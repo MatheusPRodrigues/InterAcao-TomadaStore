@@ -65,5 +65,18 @@ namespace TomadaStore.SaleAPI.Repository
                 throw;
             }
         }
+
+        public async Task<List<Sale>> GetAllSalesAsync()
+        {
+            try
+            {
+                return await _saleCollection.FindAsync(s => true).Result.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occurred while get all sales: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

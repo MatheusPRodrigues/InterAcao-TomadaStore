@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using System.Text.Json;
+using TomadaStore.Models.DTOs.Category;
 using TomadaStore.Models.DTOs.Customer;
 using TomadaStore.Models.DTOs.Product;
 using TomadaStore.Models.DTOs.SaleRequestDTO;
@@ -52,6 +53,63 @@ namespace TomadaStore.SaleAPI.Services
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred while creating a sale: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<List<SaleResponseDTO?>> GetAllSalesAsync()
+        {
+            try
+            {
+                var sales = await _saleRepository .GetAllSalesAsync();
+                if (sales is null || sales.Count == 0)
+                    return null;
+
+                var salesResponse = new List<SaleResponseDTO>();
+                foreach (var s in sales)
+                {
+                    var listProductsInSale = new List<ProductResponseDTO>();
+                    foreach (var p in s.Products)
+                    {
+                        var productDTO = new ProductResponseDTO
+                        {
+                            Id = p.Id.ToString(),
+                            Name = p.Name,
+                            Description = p.Description,
+                            Price = p.Price,
+                            Category = new CategoryResponseDTO
+                            {
+                                Id = p.Category.Id.ToString(),
+                                Name = p.Category.Name,
+                                Description = p.Category.Description,
+                            }
+                        };
+                        listProductsInSale.Add(productDTO);
+                    }
+
+                    var saleResponseDTO = new SaleResponseDTO
+                    {
+                        Id = s.Id.ToString(),
+                        Customer = new CustomerResponseDTO
+                        {
+                            Id = s.Customer.Id,
+                            FirstName = s.Customer.FirstName,
+                            LastName = s.Customer.LastName,
+                            Email = s.Customer.Email,
+                            PhoneNumber = s.Customer.PhoneNumber,
+                            Status = s.Customer.Status
+                        },
+                        Products = listProductsInSale,
+                        SaleDate = TimeZoneInfo.ConvertTimeFromUtc(s.SaleDate, TimeZoneInfo.Local),
+                        TotalPrice = s.TotalPrice,
+                    };
+                    salesResponse.Add(saleResponseDTO);
+                }
+                return salesResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while getting all sale: {ex.Message}");
                 throw;
             }
         }
