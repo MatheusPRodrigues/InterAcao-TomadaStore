@@ -13,33 +13,38 @@ namespace TomadaStore.SaleAPI.Services
     {
         private readonly ILogger<SaleService> _logger;
         private readonly ISaleRepository _saleRepository;
-        private readonly HttpClient _httpClientProduct;
-        private readonly HttpClient _httpClientCustomer;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public SaleService(
             ILogger<SaleService> logger,
             ISaleRepository saleRepository,
-            HttpClient httpClientProduct,
-            HttpClient httpClientCustomer
+            IHttpClientFactory httpClientFactory
         )
         {
             _logger = logger;
             _saleRepository = saleRepository;
-            _httpClientProduct = httpClientProduct;
-            _httpClientCustomer = httpClientCustomer;
+            _httpClientFactory = httpClientFactory;
         }
 
-        public async Task CreateSaleAsync(int idCustomer, string idProduct, SaleRequestDTO saleDTO)
+        public async Task CreateSaleAsync(int idCustomer, SaleRequestDTO saleDTO)
         {
             try
             {
-                var responseCustomer = await _httpClientCustomer
+                var responseCustomer = await _httpClientFactory
+                    .CreateClient("CustomerAPI")
                     .GetFromJsonAsync<CustomerResponseDTO>(idCustomer.ToString());
 
-                var responseProduct = await _httpClientProduct
-                    .GetFromJsonAsync<ProductResponseDTO>(idCustomer.ToString());
+                var listProducts = new List<ProductResponseDTO>();
 
-                await _saleRepository.CreateSaleAsync(responseCustomer, responseProduct, saleDTO);
+                foreach (var p in saleDTO.ProductsId)
+                {
+                    var responseProduct = await _httpClientFactory
+                        .CreateClient("ProductAPI")
+                        .GetFromJsonAsync<ProductResponseDTO>(p);
+                    listProducts.Add(responseProduct);
+                }
+
+                await _saleRepository.CreateSaleAsync(responseCustomer, listProducts, saleDTO);
             }
             catch (Exception ex)
             {

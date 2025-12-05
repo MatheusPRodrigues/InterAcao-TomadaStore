@@ -23,7 +23,7 @@ namespace TomadaStore.SaleAPI.Repository
             _saleCollection = connectionDB.GetSaleCollection();
         }
 
-        public async Task CreateSaleAsync(CustomerResponseDTO customerDTO, ProductResponseDTO productDTO, SaleRequestDTO saleDTO)
+        public async Task CreateSaleAsync(CustomerResponseDTO customerDTO, List<ProductResponseDTO> productsDTO, SaleRequestDTO saleDTO)
         {
             try
             {
@@ -37,23 +37,26 @@ namespace TomadaStore.SaleAPI.Repository
                 );
 
                 var products = new List<Product>();
-                var product = new Product(
-                    productDTO.Id,
-                    productDTO.Name,
-                    productDTO.Description,
-                    productDTO.Price,
-                    new Category(
-                        productDTO.Category.Id,
-                        productDTO.Category.Name,
-                        productDTO.Category.Description
-                    )
-                );
-                products.Add(product);
+
+                foreach (var p in productsDTO)
+                {
+                    var product = new Product(
+                        p.Id,
+                        p.Name,
+                        p.Description,
+                        p.Price,
+                        new Category(
+                            p.Category.Id,
+                            p.Category.Name,
+                            p.Category.Description
+                        )
+                    );
+                    products.Add(product);
+                }
 
                 await _saleCollection.InsertOneAsync(new Sale(
                     customer,
-                    products,
-                    productDTO.Price
+                    products
                 ));
             }
             catch (Exception ex)

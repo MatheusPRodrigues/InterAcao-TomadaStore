@@ -22,13 +22,13 @@ namespace TomadaStore.SaleAPI.Controllers.v1
             _saleService = saleService;
         }
 
-        [HttpPost("Customer/{idCustomer}/Product/{idProduct}")]
-        public async Task<ActionResult> CreateSaleAsync(int idCustomer, string idProduct, [FromBody] SaleRequestDTO saleDTO)
+        [HttpPost("Customer/{idCustomer}/Products")]
+        public async Task<ActionResult> CreateSaleAsync(int idCustomer, [FromBody] SaleRequestDTO saleDTO)
         {
             try
             {
                 _logger.LogInformation("Creating a new sale");
-                await _saleService.CreateSaleAsync(idCustomer, idProduct, saleDTO);
+                await _saleService.CreateSaleAsync(idCustomer, saleDTO);
                 return Created();
             }
             catch (Exception ex)

@@ -18,12 +18,11 @@ builder.Services.AddSingleton<ConnectionDB>();
 builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 
-builder.Services.AddHttpClient<ISaleService, SaleService>(client =>
+builder.Services.AddHttpClient("ProductAPI", client =>
     client.BaseAddress = new Uri("https://localhost:6001/api/v1/Product/"));
 
-builder.Services.AddHttpClient<ISaleService, SaleService>(client =>
+builder.Services.AddHttpClient("CustomerAPI", client =>
     client.BaseAddress = new Uri("https://localhost:5001/api/v1/Customer/"));
-
 
 var app = builder.Build();
 
