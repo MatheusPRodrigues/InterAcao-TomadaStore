@@ -2,7 +2,9 @@ using TomadaStore.SaleAPI.Data;
 using TomadaStore.SaleAPI.Repository;
 using TomadaStore.SaleAPI.Repository.Interfaces;
 using TomadaStore.SaleAPI.Services.Interfaces.v1;
+using TomadaStore.SaleAPI.Services.Interfaces.v2;
 using TomadaStore.SaleAPI.Services.v1;
+using TomadaStore.SaleAPI.Services.v2;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,8 @@ builder.Services.AddHttpClient("ProductAPI", client =>
 
 builder.Services.AddHttpClient("CustomerAPI", client =>
     client.BaseAddress = new Uri("https://localhost:5001/api/v1/Customer/"));
+
+builder.Services.AddScoped<ISaleServiceV2, SaleServiceV2>();
 
 var app = builder.Build();
 
