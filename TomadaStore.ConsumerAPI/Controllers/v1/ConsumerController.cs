@@ -27,6 +27,11 @@ namespace TomadaStore.ConsumerAPI.Controllers.v1
                 await _consumerService.GetSaleInQueueAsync();
                 return Ok(new { Message = "Compras foram consumidas com sucesso!" });
             }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning($"Warning: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"Error occurring while save Sale {ex.Message}");

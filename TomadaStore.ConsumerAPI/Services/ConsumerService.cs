@@ -43,6 +43,10 @@ namespace TomadaStore.ConsumerAPI.Services
                     arguments: null
                 );
 
+                var result = await channel.QueueDeclarePassiveAsync("sales");
+                if (result.MessageCount == 0)
+                    throw new InvalidOperationException("Não há dados para serem consumidos");
+
                 var consumer = new AsyncEventingBasicConsumer(channel);
                 consumer.ReceivedAsync += (model, ea) =>
                 {
