@@ -7,19 +7,17 @@ using System.Threading.Tasks;
 
 namespace TomadaStore.Models.DTOs.Customer
 {
-    public class CustomerResponseDTO
+    public class CustomerResponseConsumerDTO
     {
-        [JsonPropertyName("Id")]
         public int Id { get; init; }
-        [JsonPropertyName("FirstName")]
+
         public string FirstName { get; init; }
-        [JsonPropertyName("LastName")]
+
         public string LastName { get; init; }
-        [JsonPropertyName("Email")]
+
         public string Email { get; init; }
-        [JsonPropertyName("PhoneNumber")]
+
         public string? PhoneNumber { get; init; }
-        [JsonPropertyName("Status")]
         public bool Status { get; set; }
     }
 }

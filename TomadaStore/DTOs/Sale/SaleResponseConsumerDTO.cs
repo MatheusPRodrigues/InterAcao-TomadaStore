@@ -9,25 +9,20 @@ using System.Threading.Tasks;
 using TomadaStore.Models.DTOs.Customer;
 using TomadaStore.Models.DTOs.Product;
 
-namespace TomadaStore.Models.DTOs.SaleRequestDTO
+namespace TomadaStore.Models.DTOs.Sale
 {
-    public class SaleResponseDTO
+    public class SaleResponseConsumerDTO
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        [JsonPropertyName("Id")]
-        public string Id { get; init; }
+        public ObjectId Id { get; init; }
 
-        [JsonPropertyName("Customer")]
-        public CustomerResponseDTO Customer { get; init; }
+        public CustomerResponseConsumerDTO Customer { get; init; }
 
-        [JsonPropertyName("Products")]
-        public List<ProductResponseDTO> Products { get; init; }
+        public List<ProductResponseConsumerDTO> Products { get; init; }
 
-        [JsonPropertyName("SalesDate")]
         public DateTime SaleDate { get; set; }
 
-        [JsonPropertyName("TotalPrice")]
         public decimal TotalPrice { get; init; }
     }
 }

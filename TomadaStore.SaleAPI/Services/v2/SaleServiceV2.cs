@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using MongoDB.Bson;
+using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 using TomadaStore.Models.DTOs.Customer;
@@ -14,7 +15,7 @@ namespace TomadaStore.SaleAPI.Services.v2
     {
         private readonly ILogger<SaleServiceV2> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
-
+        
         public SaleServiceV2(
             ILogger<SaleServiceV2> logger,
             IHttpClientFactory httpClientFactory
@@ -102,7 +103,7 @@ namespace TomadaStore.SaleAPI.Services.v2
                     arguments: null
                 );
 
-                var saleSerialize = JsonSerializer.Serialize<Sale>(sale);
+                var saleSerialize = sale.ToJson();
                 var body = Encoding.UTF8.GetBytes(saleSerialize);
 
                 await channel.BasicPublishAsync(
