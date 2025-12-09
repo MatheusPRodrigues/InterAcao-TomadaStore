@@ -1,12 +1,16 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using System.Text;
-using System.Text.Json;
+using TomadaStore.Models.DTOs.Sale;
 using TomadaStore.Models.DTOs.Customer;
 using TomadaStore.Models.DTOs.Product;
 using TomadaStore.Models.DTOs.SaleRequestDTO;
 using TomadaStore.Models.Models;
 using TomadaStore.SaleAPI.Services.Interfaces.v2;
+using TomadaStore.SaleAPI.Repository.Interfaces;
 
 
 namespace TomadaStore.SaleAPI.Services.v2
@@ -15,14 +19,17 @@ namespace TomadaStore.SaleAPI.Services.v2
     {
         private readonly ILogger<SaleServiceV2> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ISaleRepository _saleRepository;
         
         public SaleServiceV2(
             ILogger<SaleServiceV2> logger,
-            IHttpClientFactory httpClientFactory
+            IHttpClientFactory httpClientFactory,
+            ISaleRepository saleRepository
         )
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
+            _saleRepository = saleRepository;
         }
 
         public async Task CreateSaleAsync(int idCustomer, SaleRequestDTO saleDTO)
@@ -87,7 +94,7 @@ namespace TomadaStore.SaleAPI.Services.v2
             }
         }
 
-        public async Task ProduceSaleAsync(Sale sale)
+        private async Task ProduceSaleAsync(Sale sale)
         {
             try
             {
@@ -96,7 +103,7 @@ namespace TomadaStore.SaleAPI.Services.v2
                 using var channel = await connection.CreateChannelAsync();
 
                 await channel.QueueDeclareAsync(
-                    queue: "sales",
+                    queue: "orderSales",
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
@@ -108,7 +115,7 @@ namespace TomadaStore.SaleAPI.Services.v2
 
                 await channel.BasicPublishAsync(
                     exchange: string.Empty, //seria um cluster de filas
-                    routingKey: "sales",
+                    routingKey: "orderSales",
                     body: body
                 );
                 Console.WriteLine("Sale enviado para fila do Rabbit com sucesso!");

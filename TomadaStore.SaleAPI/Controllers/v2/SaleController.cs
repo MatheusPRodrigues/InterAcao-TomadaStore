@@ -36,6 +36,6 @@ namespace TomadaStore.SaleAPI.Controllers.v2
                 _logger.LogError($"Error occurring while create a sale: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-        }
+        }        
     }
 }

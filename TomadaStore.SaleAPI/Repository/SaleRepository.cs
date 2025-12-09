@@ -78,5 +78,18 @@ namespace TomadaStore.SaleAPI.Repository
                 throw;
             }
         }
+
+        public async Task SaveSaleInBdAsync(Sale sale)
+        {
+            try
+            {
+                await _saleCollection.InsertOneAsync(sale);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error creating sale: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace TomadaStore.SaleAPI.Repository.Interfaces
             List<ProductResponseDTO> productsDTO,
             SaleRequestDTO saleDTO
         );
+
+        Task SaveSaleInBdAsync(Sale sale);
+
         Task<List<Sale>> GetAllSalesAsync();
     }
 }
