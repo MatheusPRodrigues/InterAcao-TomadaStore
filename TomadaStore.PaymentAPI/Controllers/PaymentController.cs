@@ -25,7 +25,13 @@ namespace TomadaStore.PaymentAPI.Controllers
         {
             try
             {
+                await _paymentService.ProcessOrderSalesQueueAsync();
                 return Ok(new { Message = "Fila de compras processada com sucesso!" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning($"Warning: {ex.Message}");
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
