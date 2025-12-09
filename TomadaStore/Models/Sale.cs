@@ -14,6 +14,7 @@ namespace TomadaStore.Models.Models
         public List<Product> Products { get; private set; }
         public DateTime SaleDate { get; private set; }
         public decimal TotalPrice { get; private set; }
+        public bool IsApproved { get; private set; }
 
         public Sale(
             Customer customer,
@@ -25,6 +26,7 @@ namespace TomadaStore.Models.Models
             Products = products;
             SaleDate = DateTime.UtcNow;
             TotalPrice = products.Sum(p => p.Price);
+            IsApproved = false;
         }
 
         public Sale(
@@ -32,7 +34,8 @@ namespace TomadaStore.Models.Models
             Customer customer,
             List<Product> products,
             DateTime saleDate,
-            decimal totalPrice
+            decimal totalPrice,
+            bool isApproved
         )
         {
             Id = id;
@@ -40,6 +43,12 @@ namespace TomadaStore.Models.Models
             Products = products;
             SaleDate = saleDate;
             TotalPrice = totalPrice;
+            IsApproved = isApproved;
+        }
+
+        public void SetIsApproved(bool isApproved)
+        {
+            IsApproved = isApproved;
         }
     }
 }

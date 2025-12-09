@@ -16,13 +16,10 @@ namespace TomadaStore.Models.DTOs.Sale
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; init; }
-
         public CustomerResponseConsumerDTO Customer { get; init; }
-
         public List<ProductResponseConsumerDTO> Products { get; init; }
-
-        public DateTime SaleDate { get; set; }
-
+        public DateTime SaleDate { get; init; }
         public decimal TotalPrice { get; init; }
+        public bool IsApproved { get; init; }
     }
 }

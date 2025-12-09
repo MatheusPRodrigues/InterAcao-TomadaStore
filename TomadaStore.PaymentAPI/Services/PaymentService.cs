@@ -6,16 +6,21 @@ using System.Text;
 using TomadaStore.Models.DTOs.Sale;
 using TomadaStore.Models.Models;
 using TomadaStore.PaymentAPI.Services.Interfaces;
+using TomadaStore.Utils.Helpers;
 
 namespace TomadaStore.PaymentAPI.Services
 {
     public class PaymentService : IPaymentService
     {
         private readonly ILogger<PaymentService> _logger;
+        private readonly SaleConverter _saleConverter;
 
-        public PaymentService(ILogger<PaymentService> logger)
+        public PaymentService(
+            ILogger<PaymentService> logger,
+            SaleConverter saleConverter)
         {
             _logger = logger;
+            _saleConverter = saleConverter;
         }
 
         public async Task ProcessOrderSalesQueueAsync()
@@ -47,15 +52,15 @@ namespace TomadaStore.PaymentAPI.Services
                     var content = BsonSerializer.Deserialize<SaleResponseConsumerDTO>(message);
                     if (content is not null)
                     {
-                        var sale = ConvertForSale(content);
+                        var sale = _saleConverter.ConvertForSale(content);
                         if (sale.TotalPrice < 1000)
                         {
-                            Console.WriteLine("Compra aprovada!");
+                            sale.SetIsApproved(true);
                             await AddingQueueApprovedSales(sale);
                         }
                         else
                         {
-                            Console.WriteLine("Compra recusada!");
+                            sale.SetIsApproved(false);
                             await AddingQueueApprovedSales(sale);
                         }
                     }
@@ -105,47 +110,6 @@ namespace TomadaStore.PaymentAPI.Services
                 _logger.LogError($"An error occurred while creating a sale: {ex.Message}");
                 throw;
             }
-        }
-
-        private Sale ConvertForSale(SaleResponseConsumerDTO dto)
-        {
-
-            var customer = new Customer(
-                dto.Customer.Id,
-                dto.Customer.FirstName,
-                dto.Customer.LastName,
-                dto.Customer.Email,
-                dto.Customer.PhoneNumber,
-                dto.Customer.Status
-            );
-
-            var products = new List<Product>();
-
-            foreach (var p in dto.Products)
-            {
-                var product = new Product(
-                    p.Id.ToString(),
-                    p.Name,
-                    p.Description,
-                    p.Price,
-                    new Category(
-                        p.Category.Id.ToString(),
-                        p.Category.Name,
-                        p.Category.Description
-                    )
-                );
-                products.Add(product);
-            }
-
-            var sale = new Sale(
-                dto.Id,
-                customer,
-                products,
-                dto.SaleDate,
-                dto.TotalPrice
-            );
-
-            return sale;
-        }
+        }        
     }
 }

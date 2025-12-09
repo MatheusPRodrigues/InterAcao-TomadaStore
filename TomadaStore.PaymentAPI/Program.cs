@@ -1,5 +1,6 @@
 using TomadaStore.PaymentAPI.Services;
 using TomadaStore.PaymentAPI.Services.Interfaces;
+using TomadaStore.Utils.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddSingleton<SaleConverter>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 var app = builder.Build();

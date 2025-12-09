@@ -36,26 +36,6 @@ namespace TomadaStore.SaleAPI.Controllers.v2
                 _logger.LogError($"Error occurring while create a sale: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-        }
-
-        [HttpGet("ApprovedSales")]
-        public async Task<ActionResult> PersistApprovedSales()
-        {
-            try
-            {
-                await _saleServiceV2.PersistApprovedSales();
-                return Ok();
-            }
-            catch (InvalidOperationException ex)
-            {
-                _logger.LogWarning($"validation operations return: {ex.Message}");
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error occurring while create a sale: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        }        
     }
 }
