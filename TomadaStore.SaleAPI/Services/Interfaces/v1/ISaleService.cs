@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using TomadaStore.Models.DTOs.SaleRequestDTO;
 using TomadaStore.Models.Models;
 
-namespace TomadaStore.SaleAPI.Services.Interfaces
+namespace TomadaStore.SaleAPI.Services.Interfaces.v1
 {
     public interface ISaleService
     {

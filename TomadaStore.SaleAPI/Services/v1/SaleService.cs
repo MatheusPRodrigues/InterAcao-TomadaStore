@@ -6,9 +6,9 @@ using TomadaStore.Models.DTOs.Product;
 using TomadaStore.Models.DTOs.SaleRequestDTO;
 using TomadaStore.Models.Models;
 using TomadaStore.SaleAPI.Repository.Interfaces;
-using TomadaStore.SaleAPI.Services.Interfaces;
+using TomadaStore.SaleAPI.Services.Interfaces.v1;
 
-namespace TomadaStore.SaleAPI.Services
+namespace TomadaStore.SaleAPI.Services.v1
 {
     public class SaleService : ISaleService
     {

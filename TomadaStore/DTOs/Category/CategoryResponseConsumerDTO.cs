@@ -9,19 +9,15 @@ using System.Threading.Tasks;
 
 namespace TomadaStore.Models.DTOs.Category
 {
-    public class CategoryResponseDTO
+    public class CategoryResponseConsumerDTO
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        [JsonPropertyName("Id")]
-        public string Id { get; init; }
+        
+        public ObjectId Id { get; init; }
 
-        [BsonElement("name")]
-        [JsonPropertyName("Name")]
         public string Name { get; init; }
 
-        [BsonElement("description")]
-        [JsonPropertyName("Description")]
         public string Description { get; init; }
     }
 }

@@ -20,10 +20,26 @@ namespace TomadaStore.Models.Models
             List<Product> products
         )
         {
+            Id = ObjectId.GenerateNewId();
             Customer = customer;
             Products = products;
             SaleDate = DateTime.UtcNow;
             TotalPrice = products.Sum(p => p.Price);
+        }
+
+        public Sale(
+            ObjectId id,
+            Customer customer,
+            List<Product> products,
+            DateTime saleDate,
+            decimal totalPrice
+        )
+        {
+            Id = id;
+            Customer = customer;
+            Products = products;
+            SaleDate = saleDate;
+            TotalPrice = totalPrice;
         }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using TomadaStore.Models.DTOs.SaleRequestDTO;
-using TomadaStore.SaleAPI.Services.Interfaces;
+using TomadaStore.SaleAPI.Services.Interfaces.v1;
 
 namespace TomadaStore.SaleAPI.Controllers.v1
 {

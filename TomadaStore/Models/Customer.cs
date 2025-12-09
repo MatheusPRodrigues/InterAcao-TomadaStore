@@ -9,6 +9,7 @@
         public string? PhoneNumber { get; private set; }
         public bool Status { get; private set; }
 
+
         public Customer(
             string firstName,
             string lastName,
