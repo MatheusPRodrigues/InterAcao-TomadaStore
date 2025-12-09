@@ -43,9 +43,9 @@ namespace TomadaStore.SaleConsumerAPI.Services
                     arguments: null
                 );
 
-                var result = await channel.QueueDeclarePassiveAsync("approvalsQueue");
-                if (result.MessageCount == 0)
-                    throw new InvalidOperationException("Não há compras na fila de aprovados para serem persistidos no BD");
+                var numMessages = await channel.MessageCountAsync("approvalsQueue");
+                if (numMessages == 0)
+                    throw new InvalidOperationException("Não há compras na fila de aprovados para serem persistidas no BD");
 
                 var consumer = new AsyncEventingBasicConsumer(channel);
                 consumer.ReceivedAsync += async (model, ea) =>

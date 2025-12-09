@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TomadaStore.SaleConsumerAPI.Services.Interface;
 
-namespace TomadaStore.SaleConsumerAPI.Controllers
+namespace TomadaStore.SaleConsumerAPI.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -26,12 +26,12 @@ namespace TomadaStore.SaleConsumerAPI.Controllers
             try
             {
                 await _saleService.ConsumeApprovalsQueueAsync();
-                return Ok();
+                return Ok(new { Message = "Compras foram persistidas no DB com sucesso!" });
             }
             catch (InvalidOperationException ex)
             {
                 _logger.LogError($"Don't have messages in queue for persist: {ex.Message}");
-                return NotFound(new { Message = ex.Message });
+                return StatusCode(204, new { Message = ex.Message });
             }
             catch (Exception ex)
             {

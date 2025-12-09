@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TomadaStore.PaymentAPI.Services.Interfaces;
 
-namespace TomadaStore.PaymentAPI.Controllers
+namespace TomadaStore.PaymentAPI.Controllers.v1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -31,7 +31,7 @@ namespace TomadaStore.PaymentAPI.Controllers
             catch (InvalidOperationException ex)
             {
                 _logger.LogWarning($"Warning: {ex.Message}");
-                return BadRequest(ex.Message);
+                return StatusCode(204, new { Message = ex.Message });
             }
             catch (Exception ex)
             {

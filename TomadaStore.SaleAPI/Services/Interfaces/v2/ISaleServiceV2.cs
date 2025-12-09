@@ -7,6 +7,5 @@ namespace TomadaStore.SaleAPI.Services.Interfaces.v2
     public interface ISaleServiceV2
     {
         public Task CreateSaleAsync(int idCustomer, SaleRequestDTO saleDTO);
-        public Task ProduceSaleAsync(Sale sale);
     }
 }

@@ -94,7 +94,7 @@ namespace TomadaStore.SaleAPI.Services.v2
             }
         }
 
-        public async Task ProduceSaleAsync(Sale sale)
+        private async Task ProduceSaleAsync(Sale sale)
         {
             try
             {
