@@ -1,0 +1,6 @@
+@TomadaStore.PaymentAPI_HostAddress = http://localhost:5160
+
+GET {{TomadaStore.PaymentAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -96,7 +96,7 @@ namespace TomadaStore.SaleAPI.Services.v2
                 using var channel = await connection.CreateChannelAsync();
 
                 await channel.QueueDeclareAsync(
-                    queue: "sales",
+                    queue: "orderSales",
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
@@ -108,7 +108,7 @@ namespace TomadaStore.SaleAPI.Services.v2
 
                 await channel.BasicPublishAsync(
                     exchange: string.Empty, //seria um cluster de filas
-                    routingKey: "sales",
+                    routingKey: "orderSales",
                     body: body
                 );
                 Console.WriteLine("Sale enviado para fila do Rabbit com sucesso!");
